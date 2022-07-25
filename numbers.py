@@ -78,12 +78,12 @@ def multiprocessing_with_pool():
         pool.starmap(power, args)
 
 
-if __name__ == "__main__":
-    sinchro()
-    threading()
-    threading_with_semaphore()
-    multiprocessing()
-    multiprocessing_with_pool()
+
+sinchro()
+threading()
+threading_with_semaphore()
+multiprocessing()
+multiprocessing_with_pool()
 
 
 #############################################################
