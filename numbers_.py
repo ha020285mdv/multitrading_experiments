@@ -113,13 +113,13 @@ async def main():
     print('------------------------------')
 
 
-
-sinchro()
-threading()
-threading_with_semaphore()
-multiprocessing()
-multiprocessing_with_pool()
-asyncio.run(main())
+if __name__ == 'numbers':
+    sinchro()
+    threading()
+    threading_with_semaphore()
+    multiprocessing()
+    multiprocessing_with_pool()
+    asyncio.run(main())
 
 
 #############################################################
