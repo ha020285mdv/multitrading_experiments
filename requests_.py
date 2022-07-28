@@ -1,26 +1,16 @@
+import asyncio
 import time
+
+import aiohttp
 
 import requests
 from threading import Thread
 from multiprocessing import Process
+from numbers_ import measure_time
 
 
 links = ["https://google.com", "https://amazon.com", "https://microsoft.com"]
 iterations = 5
-
-
-def measure_time(way):
-    def decorator(function):
-        def wrapper(*args, **kwargs):
-            print(f'{way}:')
-            st = time.time()
-            result = function(*args, **kwargs)
-            end = time.time()
-            print(f'average time: {(end - st) / iterations}')
-            print('------------------------------')
-            return result
-        return wrapper
-    return decorator
 
 
 def rq(lnk):
@@ -63,31 +53,65 @@ def multiprocessing():
         pr3.join()
 
 
+
+
+async def main():
+    st = time.time()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(links[0]): pass
+        async with session.get(links[1]): pass
+        async with session.get(links[2]): pass
+        async with session.get(links[0]): pass
+        async with session.get(links[1]): pass
+        async with session.get(links[2]): pass
+        async with session.get(links[0]): pass
+        async with session.get(links[1]): pass
+        async with session.get(links[2]): pass
+        async with session.get(links[0]): pass
+        async with session.get(links[1]): pass
+        async with session.get(links[2]): pass
+        async with session.get(links[0]): pass
+        async with session.get(links[1]): pass
+        async with session.get(links[2]): pass
+
+    end = time.time()
+    print('coroutins:')
+    print(f'average time: {(end - st) / iterations}')
+    print('------------------------------')
+
+
 sinchro()
 threading()
 multiprocessing()
+asyncio.run(main())
 
 """
 _________5 iter_______________
 sinchro:
-average time: 3.471709430217743
+average time: 3.1466037750244142
 ------------------------------
 threading:
-average time: 1.3072543740272522
+average time: 1.370477819442749
 ------------------------------
 multiprocessing:
-average time: 1.434463620185852
+average time: 1.4916419982910156
+------------------------------
+coroutins:
+average time: 1.7278890132904052
 ------------------------------
 
 ________10 iter_______________
 sinchro:
-average time: 3.404653453826904
+average time: 7.1787378787994385
 ------------------------------
 threading:
-average time: 1.4470402717590332
+average time: 2.929059457778931
 ------------------------------
 multiprocessing:
-average time: 1.3591494798660277
+average time: 2.949013423919678
+------------------------------
+coroutins:
+average time: 1.68001708984375
 ------------------------------
 
 """

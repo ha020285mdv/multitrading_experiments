@@ -1,3 +1,4 @@
+import asyncio
 import time
 from threading import Thread
 from multiprocessing import Pool, BoundedSemaphore
@@ -18,7 +19,7 @@ def measure_time(way):
     return decorator
 
 
-p = 1000000
+p = 1000 * 1000 * 10
 args = [(2, p), (3, p), (5, p)]
 iterations = 5
 
@@ -78,12 +79,47 @@ def multiprocessing_with_pool():
         pool.starmap(power, args)
 
 
+async def power_coroutine(num, p):
+    rez = num ** p
+    return rez
 
-sinchro()
-threading()
-threading_with_semaphore()
-multiprocessing()
-multiprocessing_with_pool()
+
+async def main():
+    st = time.time()
+    await asyncio.gather(
+        power_coroutine(*args[0]),
+        power_coroutine(*args[1]),
+        power_coroutine(*args[2]),
+
+        power_coroutine(*args[0]),
+        power_coroutine(*args[1]),
+        power_coroutine(*args[2]),
+
+        power_coroutine(*args[0]),
+        power_coroutine(*args[1]),
+        power_coroutine(*args[2]),
+
+        power_coroutine(*args[0]),
+        power_coroutine(*args[1]),
+        power_coroutine(*args[2]),
+
+        power_coroutine(*args[0]),
+        power_coroutine(*args[1]),
+        power_coroutine(*args[2]),
+    )
+    end = time.time()
+    print('coroutins:')
+    print(f'average time: {(end - st)/5}')
+    print('------------------------------')
+
+
+if __name__ == 'numbers':
+    sinchro()
+    threading()
+    threading_with_semaphore()
+    multiprocessing()
+    multiprocessing_with_pool()
+    asyncio.run(main())
 
 
 #############################################################
@@ -105,6 +141,9 @@ average time: 136.35200023651123
 multiprocessing (with pool):
 average time: 134.47210884094238
 ------------------------------
+coroutins:
+average time: 203.478124666214
+------------------------------
 
           10 000 000
 ______________________________
@@ -123,6 +162,9 @@ average time: 3.4548962116241455
 multiprocessing (with pool):
 average time: 3.7139923572540283
 ------------------------------
+coroutins:
+average time: 5.3209587097167965
+------------------------------
 
           1 000 000
 ______________________________
@@ -140,6 +182,9 @@ average time: 0.09177708625793457
 ------------------------------
 multiprocessing (with pool):
 average time: 0.0968179702758789
+------------------------------
+coroutins:
+average time: 0.13803958892822266
 ------------------------------
 
 """
